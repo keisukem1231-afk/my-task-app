@@ -1,16 +1,30 @@
-# React + Vite
+各操作の更新方法
+追加: setTasks([...tasks, newTask])
+完了切り替え: setTasks(tasks.map(...)) で対象だけdone反転
+削除: setTasks(tasks.filter(...)) で対象を除外
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+いずれもpush/spliceは使わず、新しい配列を作って渡している。
 
-Currently, two official plugins are available:
+DOM直接操作を使わない理由
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+setを呼べばReactが差分を見つけて自動で描き直してくれるため、「どのDOMをどう書き換えるか」を自分で管理する必要がなく、stateと画面のずれが起きない。
 
-## React Compiler
+詰まった場所
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+フィルターボタンを押しても表示が切り替わらず、filteredTasksを作らずにtasksをそのままmapしていたのが原因。絞り込み用の変数を別に用意して解決。
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+確認結果
+スマホ幅(375px): 崩れなし
+PC幅(1280px): 崩れなし
+判断の記録
+A: 打ち消し線 / B: 背景色
+採用: A(テキストが読めたまま完了状態が分かるため)
+確認方法: クリックして打ち消し線がつくか目視
+AI利用
+ツール: Claude
+依頼内容: Week15要件を満たすタスク管理アプリの実装
+修正箇所: なし
+AIとの比較
+正しかった点: push/splice不使用、key付与、空文字チェックあり
+不足していた点: なし(要件通り一発で実装)
+自分の判断: 完了表示の方式(打ち消し線)を選択
